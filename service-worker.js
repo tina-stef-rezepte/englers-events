@@ -1,5 +1,5 @@
-const CACHE = 'englers-events-start-v1';
-const ASSETS = ['./', './index.html', './config.js', './manifest.json', './icon-192.png', './icon-512.png'];
+const CACHE = 'englers-events-start-v2';
+const ASSETS = ['./', './index.html', './config.js', './manifest.json', './icon-v2-192.png', './icon-v2-512.png'];
 self.addEventListener('install', event => {
   event.waitUntil(caches.open(CACHE).then(cache => cache.addAll(ASSETS)));
   self.skipWaiting();
