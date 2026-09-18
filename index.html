@@ -12,8 +12,11 @@
   <style>
     :root { color-scheme: light; font-family: system-ui, sans-serif; background: #f2e8e1; color: #19362b; }
     * { box-sizing: border-box; }
-    body { margin: 0; min-height: 100svh; display: grid; place-items: center; padding: 24px; }
-    main { text-align: center; width: min(100%, 420px); }
+    html, body { margin: 0; width: 100%; height: 100%; overflow: hidden; }
+    main { position: fixed; inset: 0; z-index: 2; display: grid; place-content: center; justify-items: center; padding: 24px; text-align: center; background: #f2e8e1; }
+    main[hidden] { display: none; }
+    main > div { width: min(100%, 420px); }
+    iframe { display: block; width: 100%; height: 100%; border: 0; background: #f2e8e1; }
     img { width: min(76vw, 280px); height: auto; border-radius: 28px; box-shadow: 0 12px 34px #19362b20; }
     h1 { font: 600 1.55rem Georgia, serif; margin: 24px 0 8px; }
     p { line-height: 1.5; }
@@ -22,14 +25,17 @@
   </style>
 </head>
 <body>
-  <main>
+  <main id="splash">
+   <div>
     <img src="./icon-v2-512.png" alt="Engler's Events Logo" width="280" height="280">
     <h1>Engler's Events</h1>
     <p id="loading">Dini Anläss werded glade …</p>
     <p id="install" hidden>Fürs Homescreen-Icon: In Chrome oben rechts auf <strong>⋮</strong> tippen und <strong>App installieren</strong> oder <strong>Zum Startbildschirm hinzufügen</strong> wählen.</p>
     <p id="missing">Die Web-App-Adresse fehlt noch. Trage sie in <code>config.js</code> ein.</p>
-    <a id="open" hidden href="#">Engler's Events öffnen</a>
+    <a id="open" hidden href="#" target="_blank" rel="noopener">Engler's Events direkt öffnen</a>
+   </div>
   </main>
+  <iframe id="app" title="Engler's Events" allow="clipboard-read; clipboard-write"></iframe>
   <script src="./config.js"></script>
   <script>
     if ('serviceWorker' in navigator) {
@@ -40,14 +46,28 @@
     if (valid) {
       const link = document.getElementById('open');
       link.href = target;
-      link.hidden = false;
-      const installed = window.matchMedia('(display-mode: standalone)').matches;
+      const installed = window.matchMedia('(display-mode: standalone)').matches || navigator.standalone === true;
       const mobile = /Android/i.test(navigator.userAgent);
       if (mobile && !installed) {
+        link.hidden = false;
         document.getElementById('loading').hidden = true;
         document.getElementById('install').hidden = false;
       } else {
-        window.setTimeout(() => window.location.replace(target), 1200);
+        const app = document.getElementById('app');
+        const started = Date.now();
+        app.addEventListener('load', () => {
+          window.setTimeout(() => { document.getElementById('splash').hidden = true; },
+            Math.max(1200 - (Date.now() - started), 0));
+        }, { once: true });
+        app.src = target;
+        window.setTimeout(() => {
+          if (!document.getElementById('splash').hidden) {
+            document.getElementById('loading').textContent = 'Das Laden dauert etwas länger …';
+          }
+        }, 5000);
+        window.setTimeout(() => {
+          if (!document.getElementById('splash').hidden) link.hidden = false;
+        }, 9000);
       }
     } else {
       document.getElementById('loading').hidden = true;
