@@ -1,0 +1,50 @@
+<!doctype html>
+<html lang="de-CH">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#f2e8e1">
+  <meta name="description" content="Engler's Events – mitänand, gmüätlich, eifach">
+  <link rel="manifest" href="./manifest.json">
+  <link rel="icon" href="./icon-192.png" type="image/png">
+  <link rel="apple-touch-icon" href="./icon-192.png">
+  <title>Engler's Events</title>
+  <style>
+    :root { color-scheme: light; font-family: system-ui, sans-serif; background: #f2e8e1; color: #19362b; }
+    * { box-sizing: border-box; }
+    body { margin: 0; min-height: 100svh; display: grid; place-items: center; padding: 24px; }
+    main { text-align: center; width: min(100%, 420px); }
+    img { width: min(76vw, 280px); height: auto; border-radius: 28px; box-shadow: 0 12px 34px #19362b20; }
+    h1 { font: 600 1.55rem Georgia, serif; margin: 24px 0 8px; }
+    p { line-height: 1.5; }
+    a { display: inline-block; margin-top: 12px; padding: 13px 20px; border-radius: 12px; color: #fff; background: #38543f; text-decoration: none; font-weight: 600; }
+    #missing { display: none; }
+  </style>
+</head>
+<body>
+  <main>
+    <img src="./icon-512.png" alt="Engler's Events Logo" width="280" height="280">
+    <h1>Engler's Events</h1>
+    <p id="loading">Dini Anläss werded glade …</p>
+    <p id="missing">Die Web-App-Adresse fehlt noch. Trage sie in <code>config.js</code> ein.</p>
+    <a id="open" hidden href="#">Engler's Events öffnen</a>
+  </main>
+  <script src="./config.js"></script>
+  <script>
+    if ('serviceWorker' in navigator) {
+      addEventListener('load', () => navigator.serviceWorker.register('./service-worker.js').catch(() => {}));
+    }
+    const target = window.ENGLERS_EVENTS_URL;
+    const valid = typeof target === 'string' && /^https:\/\/script\.google\.com\/macros\/s\/[^/]+\/exec(?:\?.*)?$/.test(target);
+    if (valid) {
+      const link = document.getElementById('open');
+      link.href = target;
+      link.hidden = false;
+      window.setTimeout(() => window.location.replace(target), 1200);
+    } else {
+      document.getElementById('loading').hidden = true;
+      document.getElementById('missing').style.display = 'block';
+    }
+  </script>
+</body>
+</html>
