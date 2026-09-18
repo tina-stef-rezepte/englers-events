@@ -26,6 +26,7 @@
     <img src="./icon-512.png" alt="Engler's Events Logo" width="280" height="280">
     <h1>Engler's Events</h1>
     <p id="loading">Dini Anläss werded glade …</p>
+    <p id="install" hidden>Fürs Homescreen-Icon: In Chrome oben rechts auf <strong>⋮</strong> tippen und <strong>App installieren</strong> oder <strong>Zum Startbildschirm hinzufügen</strong> wählen.</p>
     <p id="missing">Die Web-App-Adresse fehlt noch. Trage sie in <code>config.js</code> ein.</p>
     <a id="open" hidden href="#">Engler's Events öffnen</a>
   </main>
@@ -40,7 +41,14 @@
       const link = document.getElementById('open');
       link.href = target;
       link.hidden = false;
-      window.setTimeout(() => window.location.replace(target), 1200);
+      const installed = window.matchMedia('(display-mode: standalone)').matches;
+      const mobile = /Android/i.test(navigator.userAgent);
+      if (mobile && !installed) {
+        document.getElementById('loading').hidden = true;
+        document.getElementById('install').hidden = false;
+      } else {
+        window.setTimeout(() => window.location.replace(target), 1200);
+      }
     } else {
       document.getElementById('loading').hidden = true;
       document.getElementById('missing').style.display = 'block';
