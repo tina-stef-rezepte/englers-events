@@ -3,16 +3,14 @@
   "short_name": "Events",
   "description": "Mitänand · gmüätlich · eifach",
   "lang": "de-CH",
-  "id": "./englers-events-v5",
-  "start_url": "./?v=5",
+  "id": "./englers-events-v4",
+  "start_url": "./?v=4",
   "scope": "./",
   "display": "standalone",
   "background_color": "#f2e8e1",
   "theme_color": "#f2e8e1",
   "icons": [
-    { "src": "./icon-v3-any-192.png", "sizes": "192x192", "type": "image/png", "purpose": "any" },
-    { "src": "./icon-v3-any-512.png", "sizes": "512x512", "type": "image/png", "purpose": "any" },
-    { "src": "./icon-v3-maskable-192.png", "sizes": "192x192", "type": "image/png", "purpose": "maskable" },
-    { "src": "./icon-v3-maskable-512.png", "sizes": "512x512", "type": "image/png", "purpose": "maskable" }
+    { "src": "./icon-v2-192.png", "sizes": "192x192", "type": "image/png", "purpose": "any maskable" },
+    { "src": "./icon-v2-512.png", "sizes": "512x512", "type": "image/png", "purpose": "any maskable" }
   ]
 }
